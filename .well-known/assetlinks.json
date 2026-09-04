@@ -3,6 +3,14 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
+      "package_name": "fr.quali.app",
+      "sha256_cert_fingerprints": ["C9:C7:24:5A:5A:69:39:BD:33:F7:36:5F:59:CF:FF:C2:03:C0:27:98:C7:20:97:BE:51:91:EA:ED:FF:07:E6:48"]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
       "package_name": "fr.dooka.app",
       "sha256_cert_fingerprints": ["54:34:A6:38:A1:76:DE:B4:1D:F8:7F:30:75:5D:0A:2B:80:44:5B:D2:C5:4A:17:7F:29:E9:F8:EF:5A:8B:54:7A"]
     }
