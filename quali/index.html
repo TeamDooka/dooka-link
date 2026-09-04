@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rejoindre une ligue Quali</title>
+    <meta
+      name="description"
+      content="Pronostique le top 10 de chaque Grand Prix et affronte tes potes toute la saison, sur Quali."
+    />
+
+    <!-- L'aperçu affiché par WhatsApp, iMessage, Messenger et Discord quand
+         le lien d'invitation est partagé. L'image est volontairement générique :
+         la page est un fichier statique, elle ne peut pas fabriquer un visuel
+         par ligue. Les URL doivent être absolues, un chemin relatif n'est pas
+         résolu par les robots d'aperçu. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Quali" />
+    <meta property="og:title" content="Rejoins ma ligue sur Quali" />
+    <meta
+      property="og:description"
+      content="Pronostique le top 10 de chaque Grand Prix et affronte tes potes toute la saison."
+    />
+    <meta property="og:url" content="https://link.dooka.fr/quali/" />
+    <meta property="og:image" content="https://link.dooka.fr/quali/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Rejoins ma ligue sur Quali" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Rejoins ma ligue sur Quali" />
+    <meta
+      name="twitter:description"
+      content="Pronostique le top 10 de chaque Grand Prix et affronte tes potes toute la saison."
+    />
+    <meta name="twitter:image" content="https://link.dooka.fr/quali/og.png" />
+    <meta name="theme-color" content="#0A0A0B" />
+
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #0A0A0B;
+        color: #F4F2F0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        padding: 28px;
+      }
+      .card { max-width: 380px; width: 100%; text-align: center; }
+      .mark {
+        width: 76px;
+        height: 76px;
+        border-radius: 18px;
+        margin: 0 auto 20px;
+        background: #121213;
+        border: 1px solid rgba(244, 242, 240, 0.10);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .mark img { width: 64px; height: 64px; display: block; border-radius: 14px; }
+      h1 { font-size: 23px; line-height: 1.25; margin: 0 0 10px; }
+      p { color: rgba(244, 242, 240, 0.62); line-height: 1.5; margin: 0 0 22px; }
+      .code {
+        display: inline-block;
+        font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+        font-size: 30px;
+        font-weight: 600;
+        letter-spacing: 5px;
+        padding: 14px 22px 14px 27px;
+        border: 1px solid rgba(232, 69, 44, 0.55);
+        border-radius: 14px;
+        background: rgba(232, 69, 44, 0.10);
+        color: #FF6A52;
+        margin-bottom: 24px;
+      }
+      .actions { display: flex; flex-direction: column; gap: 10px; }
+      a.button {
+        display: block;
+        padding: 15px 18px;
+        border-radius: 14px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 16px;
+        background: #E8452C;
+        color: #FFFFFF;
+      }
+      a.secondary {
+        background: #121213;
+        color: #F4F2F0;
+        border: 1px solid rgba(244, 242, 240, 0.10);
+      }
+      .note {
+        font-size: 12.5px;
+        line-height: 1.5;
+        color: rgba(244, 242, 240, 0.38);
+        margin: 26px 0 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="mark"><img src="og-icon.png" alt="Quali" /></div>
+      <h1 id="titre">Une ligue t'attend sur Quali</h1>
+      <p id="intro">
+        Quali, c'est les pronostics de sport automobile entre potes : le top 10
+        de chaque Grand Prix, des points, un classement de ligue.
+      </p>
+      <div class="code" id="code" hidden></div>
+      <div class="actions">
+        <a class="button" id="open" href="quali://">Ouvrir dans Quali</a>
+        <!-- L'identifiant numérique de la fiche App Store n'est connu qu'une
+             fois l'app publiée : remplacer `id0000000000`. -->
+        <a class="secondary button" href="https://apps.apple.com/fr/app/id0000000000"
+          >Installer sur iPhone</a
+        >
+        <a
+          class="secondary button"
+          href="https://play.google.com/store/apps/details?id=fr.quali.app"
+          >Installer sur Android</a
+        >
+      </div>
+      <p class="note">
+        Quali est une application indépendante de pronostics de sport
+        automobile, sans aucun lien avec la Formula One group ni avec les
+        écuries.
+      </p>
+    </div>
+
+    <script>
+      // Le code voyage en paramètre de requête : cette page est un fichier
+      // statique servi par GitHub Pages, elle ne saurait pas répondre à un
+      // chemin /quali/PIT447 inventé pour chaque ligue — et une 404 priverait
+      // le lien de son aperçu dans WhatsApp ou iMessage.
+      var code = (new URLSearchParams(location.search).get('code') || '').trim().toUpperCase();
+
+      if (/^[A-Z0-9]{6}$/.test(code)) {
+        var el = document.getElementById('code');
+        el.textContent = code;
+        el.hidden = false;
+        document.getElementById('titre').textContent = 'Rejoins la ligue';
+        document.getElementById('intro').textContent =
+          "Si Quali est déjà installée, ouvre-la ci-dessous : la ligue est rejointe toute seule. Sinon, installe l'app puis entre ce code.";
+        // Le schéma privé sert de repli quand l'app est installée mais que le
+        // lien universel n'a pas mordu : vérification de domaine Android
+        // encore en cours, ou build de développement.
+        document.getElementById('open').href = 'quali://ligue/' + code;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["J5DFT2NC3G.fr.quali.app"],
+        "components": [
+          {
+            "/": "/quali/*",
+            "comment": "Rejoindre une ligue Quali depuis un lien d'invitation"
+          }
+        ]
+      },
+      {
+        "appIDs": ["J5DFT2NC3G.fr.dooka.app"],
+        "components": [
+          {
+            "/": "/join-group/*",
+            "comment": "Rejoindre un groupe Dooka depuis un lien d'invitation"
+          }
+        ]
+      }
+    ]
+  }
+}
