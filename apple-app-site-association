@@ -16,6 +16,10 @@
           {
             "/": "/join-group/*",
             "comment": "Rejoindre un groupe Dooka depuis un lien d'invitation"
+          },
+          {
+            "/": "/amis*",
+            "comment": "Ouvrir la liste des demandes d ami depuis le mail de notification"
           }
         ]
       }
