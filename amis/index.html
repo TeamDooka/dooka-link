@@ -3,76 +3,144 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demande d’ami — Dooka</title>
-<style>
-  :root { color-scheme: dark; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #0D1117;
-    color: #F8F8F4;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    padding: 24px;
-    box-sizing: border-box;
-  }
-  .card {
-    max-width: 360px;
-    text-align: center;
-  }
-  h1 {
-    font-size: 22px;
-    margin-bottom: 8px;
-  }
-  p {
-    color: #C7CCD1;
-    line-height: 1.5;
-    margin-bottom: 24px;
-  }
-  a.button {
-    display: inline-block;
-    background: #178A45;
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 14px 28px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-  }
-  a.secondary {
-    display: block;
-    color: #F7C948;
-    text-decoration: none;
-    font-size: 14px;
-    margin-top: 8px;
-  }
-</style>
+<title>Demande d'ami · Dooka</title>
+<meta name="description" content="Une demande d'ami t'attend sur Dooka." />
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#070B09" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23178A45'/><text x='50' y='68' font-size='58' text-anchor='middle' font-family='sans-serif' font-weight='700' fill='%23F7F3E9'>D</text></svg>" />
+<link rel="preload" href="https://dooka.fr/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://dooka.fr/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/dooka.css" />
 </head>
 <body>
-  <div class="card">
-    <h1>👋 Demande d’ami</h1>
-    <p id="message">
-      Quelqu’un veut t’ajouter en ami sur Dooka. Ouvre l’application, puis
-      <strong>Mon profil → Amis</strong> pour accepter ou refuser.
-    </p>
-    <a class="button" id="apk-link" href="https://github.com/TeamDooka/dooka/releases/latest/download/dooka.apk">Installer Dooka (Android)</a>
-    <a class="secondary" id="open-app-link" href="dooka://amis">Déjà installée ? Ouvrir l’appli</a>
+<!--
+  Cette page ne devrait presque jamais s'afficher : link.dooka.fr déclare
+  /amis* dans apple-app-site-association et dans les intentFilters de
+  l'app, donc le lien du mail de demande d'ami s'ouvre normalement dans
+  Dooka.
+
+  Elle sert les cas où ça ne se produit pas : l'app n'est pas installée
+  sur cet appareil, l'association n'est pas encore vérifiée (iOS met le
+  fichier en cache, et assetlinks.json ne déclare qu'une empreinte de
+  signature Android), ou le mail est lu sur un ordinateur.
+
+  D'où le bouton qui ouvre l'app quand même : intent:// sur Android,
+  dooka://amis ailleurs. Le schéma personnalisé ne dépend d'aucune
+  vérification de domaine. Même logique que 404.html.
+-->
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="jeton" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#178A45"/><circle cx="50" cy="50" r="38" fill="none" stroke="#F7C948" stroke-width="7" stroke-dasharray="13 12"/><text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Bricolage Grotesque, Geist, system-ui, sans-serif" font-weight="700" font-size="44" fill="#FCFCF8">D</text></symbol>
+  <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6"/><path d="M22 11h-6"/></symbol>
+  <symbol id="i-open" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="https://dooka.fr"><svg class="jeton" aria-hidden="true"><use href="#jeton"/></svg>Dooka</a>
   </div>
-  <!--
-    Cette page ne devrait presque jamais s’afficher : link.dooka.fr déclare
-    /amis* dans apple-app-site-association et dans les intentFilters de
-    l’app, donc le lien s’ouvre normalement dans Dooka.
+</header>
 
-    Elle sert les deux cas où ça ne se produit pas : l’app n’est pas
-    installée, ou l’association n’est pas encore vérifiée sur l’appareil.
-    Le second cas n’est pas rare — iOS met le fichier en cache, et une app
-    déjà installée ne le relit qu’à sa mise à jour. Pendant quelques
-    semaines après la sortie, beaucoup de monde passera donc ici.
+<main class="page">
+  <div class="wrap">
 
-    D’où le lien dooka:// en second recours : le schéma personnalisé ne
-    dépend d’aucune vérification de domaine.
-  -->
+    <section class="rv">
+      <span class="pill"><svg class="i" aria-hidden="true"><use href="#i-user-plus"/></svg>Demande d'ami</span>
+      <h1>Une demande d'ami t'attend.</h1>
+      <p class="lede"><strong>Quelqu'un veut t'ajouter en ami sur Dooka.</strong> Tu l'acceptes ou la refuses depuis l'app.</p>
+    </section>
+
+    <div class="ticket rv" style="--d:.1s">
+      <span class="ticket-label">Dans l'app</span>
+      <p class="where">Touche ta photo ou ton nom en haut de l'écran, puis <span class="path">Amis</span>&#8239;: la demande t'attend sous <span class="path">Demandes reçues</span>.</p>
+
+      <div class="ticket-foot only-mobile">
+        <a class="btn btn-ghost btn-lg btn-block" id="open" href="dooka://amis">Ouvrir Dooka<svg class="i" aria-hidden="true"><use href="#i-open"/></svg></a>
+        <p class="note">La liste de tes demandes s'ouvre directement.</p>
+      </div>
+      <div class="ticket-foot only-desktop">
+        <p class="note">Ouvre Dooka sur ton téléphone&#8239;: la demande y est déjà.</p>
+      </div>
+    </div>
+
+    <section id="installer" aria-labelledby="installer-t">
+      <h2 id="installer-t" class="rv" style="--d:.16s">Pas encore l'app sur ce téléphone&#8239;?</h2>
+      <div class="steps-plain rv" style="--d:.22s">
+        <div class="os only-android">
+          <p>Sur Android, en téléchargement direct ou par le test fermé de Google Play. Connecte-toi ensuite avec le compte qui a reçu ce mail.</p>
+          <div class="cta">
+            <a class="btn btn-light" href="https://github.com/TeamDooka/dooka/releases/latest/download/dooka.apk"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>Télécharger pour Android</a>
+            <a class="btn btn-ghost" href="https://play.google.com/apps/testing/fr.dooka.app">Google Play · test fermé<svg class="i" aria-hidden="true"><use href="#i-chev-r"/></svg></a>
+          </div>
+        </div>
+        <div class="os only-ios">
+          <p>Sur iPhone, l'app est en test, sur invitation&#8239;: écris-nous pour en recevoir une.</p>
+          <div class="cta">
+            <a class="btn btn-ghost" href="mailto:contact@dooka.fr?subject=Invitation%20Dooka%20sur%20iPhone"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Demander une invitation</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <ul class="foot-links">
+      <li><a href="https://dooka.fr">dooka.fr</a></li>
+      <li><a href="https://dooka.fr/confidentialite.html">Confidentialité</a></li>
+      <li><a href="https://dooka.fr/jeu-responsable.html">Jeu responsable</a></li>
+      <li><a href="mailto:contact@dooka.fr">contact@dooka.fr</a></li>
+    </ul>
+    <div class="fine">
+      <p><strong>Dooka est une application indépendante, non affiliée au PMU ni à la Française des Jeux.</strong> Elle ne permet ni de jouer, ni de parier, ni de recevoir de l'argent.</p>
+      <p>Jouer comporte des risques&#8239;: endettement, isolement, dépendance. Interdit aux mineurs. Appelez le <a href="tel:0974751313">09 74 75 13 13</a> (Joueurs Info Service, appel non surtaxé).</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // Même détection que 404.html : voir ses commentaires.
+  var root = document.documentElement;
+  var search = window.location.search;
+  root.classList.add('js');
+  if (/[?&]still\b/.test(search)) root.classList.add('still');
+  var ua = navigator.userAgent;
+  var forced = (search.match(/[?&]os=(ios|android|desktop)\b/) || [])[1];
+  var ios = forced ? forced === 'ios'
+    : /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var android = forced ? forced === 'android' : /Android/i.test(ua);
+  var desktop = forced ? forced === 'desktop'
+    : !ios && !android && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (ios) root.setAttribute('data-os', 'ios');
+  if (android) root.setAttribute('data-os', 'android');
+  if (desktop) root.setAttribute('data-device', 'desktop');
+
+  var open = document.getElementById('open');
+  if (android) {
+    open.href = 'intent://amis#Intent;scheme=dooka;package=fr.dooka.app;S.browser_fallback_url=' +
+      encodeURIComponent(window.location.href.split('#')[0] + '#installer') + ';end';
+  } else {
+    open.addEventListener('click', function () {
+      var t = setTimeout(function () {
+        if (document.visibilityState === 'visible') {
+          document.getElementById('installer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 1600);
+      var cancel = function () { clearTimeout(t); };
+      document.addEventListener('visibilitychange', cancel, { once: true });
+      window.addEventListener('pagehide', cancel, { once: true });
+    });
+  }
+})();
+</script>
 </body>
 </html>

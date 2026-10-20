@@ -8,11 +8,27 @@ leur permettent d'ouvrir l'app au lieu du navigateur.
 `.nojekyll` est indispensable — sans lui, GitHub Pages ignore les dossiers
 qui commencent par un point, donc `.well-known/`.
 
-## Dooka — `/join-group/<code>`
+## Dooka — `/join-group/<code>` et `/amis`
 
-Le lien est de la forme `https://link.dooka.fr/join-group/PIT447`. Aucun
-fichier ne correspond à ce chemin : c'est `404.html` qui le rattrape, lit
-le code dans l'URL et propose d'ouvrir `dooka://join-group/<code>`.
+Le lien d'invitation est de la forme `https://link.dooka.fr/join-group/K4P9RX`.
+Aucun fichier ne correspond à ce chemin : c'est `404.html` qui le rattrape
+et lit le code dans l'URL (`?code=` aussi, pour tester en local). La page
+affiche le code en grand avec un bouton pour le copier, un bouton qui ouvre
+l'app quand même (`intent://` sur Android, `dooka://` ailleurs), les étapes
+d'installation adaptées à l'appareil, et un QR code sur ordinateur. Toute
+autre adresse inexistante tombe sur la même page, qui dit alors qu'elle
+n'existe pas.
+
+`amis/index.html` est le repli du bouton « Ouvrir Dooka » du mail de
+demande d'ami, sur le même principe.
+
+Ces pages suivent le style de dooka.fr : `assets/dooka.css`, polices
+chargées depuis dooka.fr. La racine renvoie vers dooka.fr.
+
+Pour les voir en local avec le comportement de GitHub Pages (un chemin
+inconnu reçoit `404.html`), un simple `python -m http.server` ne suffit
+pas : il faut un serveur qui serve `404.html` sur les chemins absents.
+`?os=ios|android|desktop` force la variante, `?still` coupe l'animation.
 
 ## Quali — `/quali/?code=<code>`
 

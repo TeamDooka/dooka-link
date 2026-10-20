@@ -3,74 +3,323 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dooka</title>
-<style>
-  :root { color-scheme: dark; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #0D1117;
-    color: #F8F8F4;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    padding: 24px;
-    box-sizing: border-box;
-  }
-  .card {
-    max-width: 360px;
-    text-align: center;
-  }
-  h1 {
-    font-size: 22px;
-    margin-bottom: 8px;
-  }
-  p {
-    color: #C7CCD1;
-    line-height: 1.5;
-    margin-bottom: 24px;
-  }
-  a.button {
-    display: inline-block;
-    background: #178A45;
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 14px 28px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-  }
-  a.secondary {
-    display: block;
-    color: #F7C948;
-    text-decoration: none;
-    font-size: 14px;
-    margin-top: 8px;
-  }
-</style>
+<title>Invitation Dooka</title>
+<meta name="description" content="Rejoins le groupe de ta bande sur Dooka avec le code reçu." />
+<meta name="robots" content="noindex" />
+<!-- Aperçu du lien dans les messageries. Pas d'og:url : chaque invitation
+     a sa propre adresse, et c'est elle que l'aperçu doit garder. -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Dooka" />
+<meta property="og:title" content="Rejoins la bande sur Dooka" />
+<meta property="og:description" content="Un pote t'invite dans son groupe. Installe Dooka et entre avec le code reçu : gratuite, sans pub." />
+<meta property="og:image" content="https://dooka.fr/og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Dooka tient les comptes de la bande" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#070B09" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23178A45'/><text x='50' y='68' font-size='58' text-anchor='middle' font-family='sans-serif' font-weight='700' fill='%23F7F3E9'>D</text></svg>" />
+<link rel="preload" href="https://dooka.fr/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://dooka.fr/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/dooka.css" />
 </head>
 <body>
-  <div class="card">
-    <h1>🎟️ Invitation Dooka</h1>
-    <p id="message">On t'a invité à rejoindre un groupe sur Dooka, l'appli entre potes pour suivre les gains PMU.</p>
-    <a class="button" id="apk-link" href="https://github.com/TeamDooka/dooka/releases/latest/download/dooka.apk">Installer Dooka (Android)</a>
-    <a class="secondary" id="open-app-link" href="#">Déjà installée ? Ouvrir l'appli</a>
+<!--
+  Page de repli des liens d'invitation de Dooka.
+
+  Le lien partagé par l'app est https://link.dooka.fr/join-group/<code>.
+  Aucun fichier ne porte ce chemin : GitHub Pages répond par cette page,
+  qui lit le code dans l'URL. Elle s'affiche dans trois cas :
+    - l'app n'est pas installée ;
+    - elle l'est, mais le système n'a pas (encore) vérifié le lien de
+      l'app : iOS ne relit apple-app-site-association qu'à l'installation,
+      et assetlinks.json ne déclare qu'une empreinte de signature, donc
+      une seule des deux voies d'installation Android (APK ou Play) ;
+    - le lien est ouvert sur un ordinateur, depuis WhatsApp Web.
+  D'où le code affiché en grand, le bouton qui ouvre l'app quand même
+  (lien intent:// sur Android, dooka:// ailleurs), et un QR code sur
+  ordinateur.
+
+  `?code=K4P9RX` est lu aussi : pour tester en local, et pour le jour où
+  l'app partagerait /join-group/?code=… (une page qui répond 200, donc
+  un aperçu garanti dans les messageries, comme pour Quali).
+
+  Toute autre adresse inexistante de link.dooka.fr arrive ici aussi :
+  la page dit alors simplement qu'elle n'existe pas.
+-->
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="jeton" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#178A45"/><circle cx="50" cy="50" r="38" fill="none" stroke="#F7C948" stroke-width="7" stroke-dasharray="13 12"/><text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Bricolage Grotesque, Geist, system-ui, sans-serif" font-weight="700" font-size="44" fill="#FCFCF8">D</text></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-open" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="https://dooka.fr"><svg class="jeton" aria-hidden="true"><use href="#jeton"/></svg>Dooka</a>
   </div>
-  <script>
-    // Le lien d'invitation d'origine est de la forme
-    // https://link.dooka.fr/join-group/<code> : si Android l'a ouvert ici
-    // plutôt que directement dans l'app, c'est que l'App Link n'est pas
-    // (encore) vérifié sur cet appareil — on tente quand même le lien de
-    // schéma personnalisé dooka:// en dernier recours.
-    var match = window.location.pathname.match(/join-group\/([A-Za-z0-9]+)/);
-    if (match) {
-      var code = match[1];
-      var appUrl = 'dooka://join-group/' + code;
-      document.getElementById('open-app-link').href = appUrl;
-      document.getElementById('message').textContent =
-        "On t'a invité à rejoindre un groupe sur Dooka. Si l'app est déjà installée, appuie sur \"Ouvrir l'appli\" ci-dessous. Sinon, installe-la d'abord.";
+</header>
+
+<main class="page">
+  <div class="wrap">
+
+    <!-- Sans script, ou avant qu'il ne tourne : l'invitation, sans le code. -->
+    <section id="head-invite" class="rv">
+      <span class="pill"><svg class="i" aria-hidden="true"><use href="#i-users"/></svg>Invitation à un groupe</span>
+      <h1>Ta bande t'attend sur Dooka.</h1>
+      <p class="lede" id="lede-default"><strong>Un pote t'invite dans son groupe.</strong> Le code du groupe figure dans le message reçu&#8239;: une fois l'app installée, il suffit de le taper.</p>
+      <p class="lede" id="lede-code" hidden><strong>Un pote t'invite dans son groupe.</strong> Avec ce code, tu y entres directement, sans attendre qu'on te valide.</p>
+    </section>
+
+    <section id="head-nocode" class="rv" hidden>
+      <span class="pill"><svg class="i" aria-hidden="true"><use href="#i-users"/></svg>Invitation à un groupe</span>
+      <h1>Il manque le code du groupe.</h1>
+      <p class="lede"><strong>Le lien semble coupé.</strong> Le code, six lettres et chiffres, figure aussi dans le message reçu&#8239;: tu pourras le taper dans l'app.</p>
+    </section>
+
+    <section id="head-404" class="rv" hidden>
+      <h1>Cette page n'existe pas.</h1>
+      <p class="lede"><strong>Le lien est peut-être incomplet.</strong> Si on t'a invité dans un groupe Dooka, le code figure aussi dans le message reçu.</p>
+    </section>
+
+    <div class="ticket rv" id="ticket" style="--d:.1s" hidden>
+      <div class="ticket-head">
+        <span class="ticket-label" id="code-label">Code du groupe</span>
+        <button class="btn btn-ghost btn-sm copy" id="copy" type="button">
+          <svg class="i i-idle" aria-hidden="true"><use href="#i-copy"/></svg><svg class="i i-done" aria-hidden="true"><use href="#i-check"/></svg><span id="copy-label">Copier</span>
+        </button>
+      </div>
+      <p class="code" id="code"></p>
+
+      <div class="ticket-foot only-mobile">
+        <a class="btn btn-ghost btn-lg btn-block" id="open" href="#installer">Ouvrir dans Dooka<svg class="i" aria-hidden="true"><use href="#i-open"/></svg></a>
+        <p class="note">Si Dooka est déjà sur ton téléphone, tu rejoins le groupe d'un appui.</p>
+      </div>
+
+      <div class="ticket-foot only-desktop" id="qr-foot">
+        <div class="qr" id="qr" hidden>
+          <div class="qr-tile" id="qr-tile"></div>
+          <p><b>Scanne ce QR code avec ton téléphone.</b>L'appareil photo suffit&#8239;: l'invitation s'ouvre sur le téléphone, là où Dooka s'installe.</p>
+        </div>
+        <p class="note" id="qr-none">Ouvre ce lien sur ton téléphone&#8239;: c'est là que Dooka s'installe.</p>
+      </div>
+    </div>
+
+    <section id="installer" aria-labelledby="installer-t">
+      <h2 id="installer-t" class="rv" style="--d:.16s">Pas encore l'app&#8239;?</h2>
+      <ol class="steps rv" style="--d:.22s">
+        <li>
+          <b>Installe Dooka</b>
+          <div class="os only-android">
+            <p>Sur Android, en téléchargement direct ou par le test fermé de Google Play.</p>
+            <div class="cta">
+              <a class="btn btn-light" href="https://github.com/TeamDooka/dooka/releases/latest/download/dooka.apk"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>Télécharger pour Android</a>
+              <a class="btn btn-ghost" href="https://play.google.com/apps/testing/fr.dooka.app">Google Play · test fermé<svg class="i" aria-hidden="true"><use href="#i-chev-r"/></svg></a>
+            </div>
+          </div>
+          <div class="os only-ios">
+            <p>Sur iPhone, l'app est en test, sur invitation&#8239;: écris-nous pour en recevoir une.</p>
+            <div class="cta">
+              <a class="btn btn-ghost" href="mailto:contact@dooka.fr?subject=Invitation%20Dooka%20sur%20iPhone"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Demander une invitation</a>
+            </div>
+          </div>
+        </li>
+        <li>
+          <b>Crée ton compte</b>
+          <p>Avec Google, ou avec une adresse e-mail et un mot de passe. Dooka est réservée aux majeurs.</p>
+        </li>
+        <li>
+          <b>Rejoins le groupe</b>
+          <p>Rouvre ce lien depuis le message reçu, ou tape <span id="code-inline">le code</span> dans <span class="path"><span>Sessions ›</span> <span>Mes groupes ›</span> <span>Rejoindre</span></span>. Tu fais partie du groupe aussitôt.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="about" aria-labelledby="about-t">
+      <h2 id="about-t">C'est quoi, Dooka&#8239;?</h2>
+      <p>Dooka tient les comptes de la bande. Les tickets se notent en quelques appuis, chaque session a son classement, et les bilans nets se comparent entre potes. Gratuite, sans pub, sans abonnement.</p>
+      <a class="arrow-link" href="https://dooka.fr"><span>Découvrir Dooka</span><svg class="i" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
+    </section>
+
+    <p id="live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <ul class="foot-links">
+      <li><a href="https://dooka.fr">dooka.fr</a></li>
+      <li><a href="https://dooka.fr/confidentialite.html">Confidentialité</a></li>
+      <li><a href="https://dooka.fr/jeu-responsable.html">Jeu responsable</a></li>
+      <li><a href="mailto:contact@dooka.fr">contact@dooka.fr</a></li>
+    </ul>
+    <div class="fine">
+      <p><strong>Dooka est une application indépendante, non affiliée au PMU ni à la Française des Jeux.</strong> Elle ne permet ni de jouer, ni de parier, ni de recevoir de l'argent.</p>
+      <p>Jouer comporte des risques&#8239;: endettement, isolement, dépendance. Interdit aux mineurs. Appelez le <a href="tel:0974751313">09 74 75 13 13</a> (Joueurs Info Service, appel non surtaxé).</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var root = document.documentElement;
+  var search = window.location.search;
+  root.classList.add('js');
+  if (/[?&]still\b/.test(search)) root.classList.add('still');
+
+  // L'appareil décide de ce qu'on propose : un APK n'a rien à faire sur
+  // un iPhone, et « Ouvrir dans Dooka » rien sur un ordinateur. Sans
+  // certitude, on montre tout. `?os=ios|android|desktop` force le choix,
+  // pour les captures de recette.
+  var ua = navigator.userAgent;
+  var forced = (search.match(/[?&]os=(ios|android|desktop)\b/) || [])[1];
+  var ios = forced ? forced === 'ios'
+    : /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var android = forced ? forced === 'android' : /Android/i.test(ua);
+  var desktop = forced ? forced === 'desktop'
+    : !ios && !android && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (ios) root.setAttribute('data-os', 'ios');
+  if (android) root.setAttribute('data-os', 'android');
+  if (desktop) root.setAttribute('data-device', 'desktop');
+
+  // Même règle que l'app (src/utils/liensProfonds.ts) : join-group, puis
+  // un code alphanumérique, rien d'autre.
+  var path = window.location.pathname;
+  var fromPath = path.match(/^\/join-group\/([A-Za-z0-9]+)\/?$/);
+  var fromQuery = search.match(/[?&]code=([A-Za-z0-9]+)/);
+  var code = fromPath ? fromPath[1] : fromQuery ? fromQuery[1] : null;
+  var isJoin = /^\/join-group(\/|$)/.test(path);
+
+  if (!code && !isJoin) {
+    $('head-invite').hidden = true;
+    $('head-404').hidden = false;
+    $('installer').hidden = true;
+    document.title = 'Page introuvable · Dooka';
+    return;
+  }
+  if (!code) {
+    $('head-invite').hidden = true;
+    $('head-nocode').hidden = false;
+    return;
+  }
+
+  code = code.toUpperCase();
+  var invite = 'https://link.dooka.fr/join-group/' + code;
+  $('lede-default').hidden = true;
+  $('lede-code').hidden = false;
+  $('ticket').hidden = false;
+  $('code').textContent = code;
+  var inline = $('code-inline');
+  inline.textContent = 'le code ';
+  var mono = document.createElement('span');
+  mono.className = 'mono';
+  mono.textContent = code;
+  inline.appendChild(mono);
+
+  // ---- Copier le code ----
+  var copy = $('copy');
+  var copyLabel = $('copy-label');
+  var live = $('live');
+  var resetTimer;
+  function copied() {
+    copy.classList.add('done');
+    copyLabel.textContent = 'Copié';
+    live.textContent = 'Code ' + code + ' copié.';
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(function () {
+      copy.classList.remove('done');
+      copyLabel.textContent = 'Copier';
+    }, 2200);
+  }
+  function selectCode() {
+    var range = document.createRange();
+    range.selectNodeContents($('code'));
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    if (ok) copied();
+    else live.textContent = 'Le code est sélectionné : copie-le depuis le menu.';
+  }
+  copy.addEventListener('click', function () {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(code).then(copied, selectCode);
+    } else {
+      selectCode();
     }
-  </script>
+  });
+
+  // ---- Ouvrir l'app ----
+  // Android : un lien intent:// ouvre fr.dooka.app s'il est installé, et
+  // renvoie sinon vers les étapes d'installation de cette même page.
+  // Ailleurs, le schéma dooka:// : il ne dépend d'aucune vérification de
+  // domaine, c'est tout son intérêt ici.
+  var open = $('open');
+  var here = window.location.href.split('#')[0];
+  if (android) {
+    open.href = 'intent://join-group/' + code +
+      '#Intent;scheme=dooka;package=fr.dooka.app;S.browser_fallback_url=' +
+      encodeURIComponent(here + '#installer') + ';end';
+  } else {
+    open.href = 'dooka://join-group/' + code;
+    // Sans l'app, iOS affiche une erreur et la page reste là : on descend
+    // alors aux étapes d'installation. Si l'app s'ouvre, la page passe en
+    // arrière-plan et le minuteur tombe.
+    open.addEventListener('click', function () {
+      var t = setTimeout(function () {
+        if (document.visibilityState === 'visible') {
+          $('installer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 1600);
+      var cancel = function () { clearTimeout(t); };
+      document.addEventListener('visibilitychange', cancel, { once: true });
+      window.addEventListener('pagehide', cancel, { once: true });
+    });
+  }
+
+  // ---- QR code, sur ordinateur seulement ----
+  // La bibliothèque ne se charge que là, avec son empreinte : sur un
+  // téléphone, elle ne servirait à rien.
+  if (desktop) {
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+    s.integrity = 'sha384-mZT2gIty7ZDdOGkxfP6joZcYdMW1Jvj9dRlfpTmaJAKKXTqzygtB22k7FLe+KZC1';
+    s.crossOrigin = 'anonymous';
+    s.onload = function () {
+      try {
+        var qr = window.qrcode(0, 'M');
+        qr.addData(invite);
+        qr.make();
+        var n = qr.getModuleCount();
+        var d = '';
+        for (var r = 0; r < n; r += 1) {
+          for (var c = 0; c < n; c += 1) {
+            if (qr.isDark(r, c)) d += 'M' + c + ' ' + r + 'h1v1h-1z';
+          }
+        }
+        // Deux modules de marge claire autour : les lecteurs en ont besoin.
+        $('qr-tile').innerHTML =
+          '<svg viewBox="-2 -2 ' + (n + 4) + ' ' + (n + 4) + '" shape-rendering="crispEdges" role="img" aria-label="QR code de l\'invitation">' +
+          '<path fill="#0B0D0C" d="' + d + '"/></svg>';
+        $('qr').hidden = false;
+        $('qr-none').hidden = true;
+      } catch (e) { /* la phrase de repli reste affichée */ }
+    };
+    document.head.appendChild(s);
+  }
+})();
+</script>
 </body>
 </html>
