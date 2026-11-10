@@ -22,6 +22,18 @@ n'existe pas.
 `amis/index.html` est le repli du bouton « Ouvrir Dooka » du mail de
 demande d'ami, sur le même principe.
 
+## Dooka — `/mdp/?token_hash=…&type=recovery`
+
+Le bouton du mail « mot de passe oublié » (gabarit Supabase versionné
+dans `supabase/email-templates/` du dépôt de l'app) mène à
+`mdp/index.html`, avec le jeton à usage unique de Supabase. La page ne
+le consomme pas : elle le transmet à l'app (`dooka://mdp?…`, par
+`intent://` sur Android), qui le vérifie et affiche l'écran du nouveau
+mot de passe, ou au formulaire de `dooka.fr/auth.html` (ordinateur,
+version de l'app trop ancienne, demande faite depuis un autre
+téléphone). Le chemin n'est volontairement déclaré dans aucun fichier
+d'association : la page s'affiche toujours.
+
 Ces pages suivent le style de dooka.fr : `assets/dooka.css`, polices
 chargées depuis dooka.fr. La racine renvoie vers dooka.fr.
 

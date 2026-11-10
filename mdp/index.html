@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nouveau mot de passe · Dooka</title>
+<meta name="description" content="Choisis un nouveau mot de passe pour ton compte Dooka." />
+<meta name="robots" content="noindex" />
+<!-- L'adresse de la page porte un jeton à usage unique : elle ne part chez
+     personne, pas même dans l'en-tête Referer des polices. -->
+<meta name="referrer" content="no-referrer" />
+<meta name="theme-color" content="#070B09" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23178A45'/><text x='50' y='68' font-size='58' text-anchor='middle' font-family='sans-serif' font-weight='700' fill='%23F7F3E9'>D</text></svg>" />
+<link rel="preload" href="https://dooka.fr/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://dooka.fr/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/dooka.css" />
+</head>
+<body>
+<!--
+  Le bouton du mail « mot de passe oublié » mène ici, avec le jeton à usage
+  unique de Supabase : /mdp/?token_hash=…&type=recovery. Le gabarit du mail
+  est versionné dans le dépôt de l'app (supabase/email-templates).
+
+  Avant, ce bouton pointait vers l'adresse du projet Supabase, qui
+  consommait le jeton et renvoyait vers l'app. Ici, rien n'est consommé :
+  la page ne fait que transmettre le jeton, et c'est l'app qui le vérifie
+  (supabase.auth.verifyOtp) puis affiche l'écran du nouveau mot de passe.
+  Un antivirus qui visite le lien avant la personne ne le grille donc pas.
+
+  Deux sorties :
+    - « Ouvrir Dooka » : dooka://mdp?token_hash=…&type=recovery, via
+      intent:// sur Android (qui retombe sur le formulaire du site si l'app
+      n'est pas installée) ;
+    - le formulaire de dooka.fr/auth.html, même jeton, pour un ordinateur,
+      une version de l'app trop ancienne pour lire ce lien, ou une demande
+      faite depuis un autre téléphone (l'app refuse alors le lien, pour
+      qu'on ne puisse pas la connecter sur le compte d'un inconnu).
+
+  /mdp n'est déclaré ni dans apple-app-site-association ni dans les
+  intentFilters de l'app : cette page s'affiche toujours, c'est voulu.
+-->
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="jeton" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#178A45"/><circle cx="50" cy="50" r="38" fill="none" stroke="#F7C948" stroke-width="7" stroke-dasharray="13 12"/><text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Bricolage Grotesque, Geist, system-ui, sans-serif" font-weight="700" font-size="44" fill="#FCFCF8">D</text></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></symbol>
+  <symbol id="i-open" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="https://dooka.fr"><svg class="jeton" aria-hidden="true"><use href="#jeton"/></svg>Dooka</a>
+  </div>
+</header>
+
+<main class="page">
+  <div class="wrap">
+
+    <div id="valide">
+      <section class="rv">
+        <span class="pill"><svg class="i" aria-hidden="true"><use href="#i-key"/></svg>Mot de passe oublié</span>
+        <h1>Choisis un nouveau mot de passe.</h1>
+        <p class="lede"><strong>Dooka s'ouvre sur l'écran du nouveau mot de passe.</strong> Le lien ne sert qu'une fois.</p>
+      </section>
+
+      <div class="ticket rv" style="--d:.1s">
+        <div class="only-mobile">
+          <span class="ticket-label">Sur ce téléphone</span>
+          <p class="where">Ouvre Dooka depuis le téléphone où tu as demandé le lien, sans t'être reconnecté entre-temps.</p>
+          <div class="ticket-foot">
+            <a class="btn btn-light btn-lg btn-block" id="ouvrir" href="#ailleurs">Ouvrir Dooka<svg class="i" aria-hidden="true"><use href="#i-open"/></svg></a>
+          </div>
+        </div>
+        <div class="only-desktop">
+          <span class="ticket-label">Sur un ordinateur</span>
+          <p class="where">Choisis-le directement sur dooka.fr, puis connecte-toi dans l'app avec ce nouveau mot de passe.</p>
+          <div class="ticket-foot">
+            <a class="btn btn-light btn-lg btn-block" id="site-bureau" href="https://dooka.fr/auth.html">Choisir sur dooka.fr<svg class="i" aria-hidden="true"><use href="#i-chev-r"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <section id="ailleurs" class="only-mobile" aria-labelledby="ailleurs-t">
+        <h2 id="ailleurs-t" class="rv" style="--d:.16s">Ça ne s'ouvre pas&#8239;?</h2>
+        <div class="steps-plain rv" style="--d:.22s">
+          <p>Si Dooka ne s'ouvre pas, ou s'ouvre sans te proposer de nouveau mot de passe — demande faite depuis un autre téléphone, version de l'app plus ancienne —, choisis-le sur le site. Tu te connecteras ensuite dans l'app avec ce mot de passe.</p>
+          <div class="cta">
+            <a class="btn btn-ghost" id="site" href="https://dooka.fr/auth.html">Choisir sur dooka.fr<svg class="i" aria-hidden="true"><use href="#i-chev-r"/></svg></a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section id="invalide" class="rv" hidden>
+      <span class="pill"><svg class="i" aria-hidden="true"><use href="#i-key"/></svg>Mot de passe oublié</span>
+      <h1>Ce lien est incomplet.</h1>
+      <p class="lede"><strong>Ouvre-le directement depuis le mail reçu,</strong> sans le recopier à la main. S'il a expiré, redemande un lien depuis l'écran de connexion de Dooka.</p>
+    </section>
+
+    <noscript>
+      <p class="lede">Cette page a besoin de JavaScript pour transmettre le lien à Dooka.</p>
+    </noscript>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <ul class="foot-links">
+      <li><a href="https://dooka.fr">dooka.fr</a></li>
+      <li><a href="https://dooka.fr/confidentialite.html">Confidentialité</a></li>
+      <li><a href="https://dooka.fr/jeu-responsable.html">Jeu responsable</a></li>
+      <li><a href="mailto:contact@dooka.fr">contact@dooka.fr</a></li>
+    </ul>
+    <div class="fine">
+      <p><strong>Dooka est une application indépendante, non affiliée au PMU ni à la Française des Jeux.</strong> Elle ne permet ni de jouer, ni de parier, ni de recevoir de l'argent.</p>
+      <p>Jouer comporte des risques&#8239;: endettement, isolement, dépendance. Interdit aux mineurs. Appelez le <a href="tel:0974751313">09 74 75 13 13</a> (Joueurs Info Service, appel non surtaxé).</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // Même détection que 404.html et amis/ : voir leurs commentaires.
+  var root = document.documentElement;
+  var search = window.location.search;
+  root.classList.add('js');
+  if (/[?&]still\b/.test(search)) root.classList.add('still');
+  var ua = navigator.userAgent;
+  var forced = (search.match(/[?&]os=(ios|android|desktop)\b/) || [])[1];
+  var ios = forced ? forced === 'ios'
+    : /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var android = forced ? forced === 'android' : /Android/i.test(ua);
+  var desktop = forced ? forced === 'desktop'
+    : !ios && !android && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (ios) root.setAttribute('data-os', 'ios');
+  if (android) root.setAttribute('data-os', 'android');
+  if (desktop) root.setAttribute('data-device', 'desktop');
+
+  // Le jeton de Supabase : hexadécimal, préfixé de « pkce_ » en flux PKCE.
+  // Même contrôle que l'app (lireLienAVerifier) : rien d'autre ne part.
+  var params = new URLSearchParams(search);
+  var jeton = params.get('token_hash') || '';
+  if (!/^[A-Za-z0-9_-]{8,256}$/.test(jeton) || params.get('type') !== 'recovery') {
+    document.getElementById('valide').hidden = true;
+    document.getElementById('invalide').hidden = false;
+    return;
+  }
+
+  var requete = 'token_hash=' + encodeURIComponent(jeton) + '&type=recovery';
+  // Le formulaire du site vérifie le même jeton, puis enregistre le mot de
+  // passe lui-même.
+  var surLeSite = 'https://dooka.fr/auth.html?' + requete;
+  document.getElementById('site').href = surLeSite;
+  document.getElementById('site-bureau').href = surLeSite;
+
+  var ouvrir = document.getElementById('ouvrir');
+  if (android) {
+    // Sans l'app installée, Chrome suit browser_fallback_url : le
+    // formulaire du site, plutôt qu'un retour sur cette page.
+    ouvrir.href = 'intent://mdp?' + requete + '#Intent;scheme=dooka;package=fr.dooka.app;S.browser_fallback_url=' +
+      encodeURIComponent(surLeSite) + ';end';
+  } else {
+    ouvrir.href = 'dooka://mdp?' + requete;
+    ouvrir.addEventListener('click', function () {
+      var t = setTimeout(function () {
+        if (document.visibilityState === 'visible') {
+          document.getElementById('ailleurs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 1600);
+      var cancel = function () { clearTimeout(t); };
+      document.addEventListener('visibilitychange', cancel, { once: true });
+      window.addEventListener('pagehide', cancel, { once: true });
+    });
+  }
+})();
+</script>
+</body>
+</html>
