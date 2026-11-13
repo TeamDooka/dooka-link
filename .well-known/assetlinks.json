@@ -12,7 +12,10 @@
     "target": {
       "namespace": "android_app",
       "package_name": "fr.dooka.app",
-      "sha256_cert_fingerprints": ["54:34:A6:38:A1:76:DE:B4:1D:F8:7F:30:75:5D:0A:2B:80:44:5B:D2:C5:4A:17:7F:29:E9:F8:EF:5A:8B:54:7A"]
+      "sha256_cert_fingerprints": [
+        "54:34:A6:38:A1:76:DE:B4:1D:F8:7F:30:75:5D:0A:2B:80:44:5B:D2:C5:4A:17:7F:29:E9:F8:EF:5A:8B:54:7A",
+        "FC:E8:4B:2C:4D:B7:FF:29:40:C6:4E:49:CB:18:42:62:DB:73:CC:E4:A9:F5:06:CC:98:B1:AD:D0:1C:3E:EC:13"
+      ]
     }
   }
 ]
